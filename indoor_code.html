@@ -1,0 +1,40 @@
+<!--
+Here, we write code for registration.
+-->
+<?php
+require_once('connection.php');
+$fname  =   $email = $phone = $enroll = $college = $gender  = $games = '';
+
+$fname = $_POST['firstname'];
+$email = $_POST['email'];
+$phone = $_POST['mobile'];
+$enroll = $_POST['enroll'];
+$college = $_POST['col'];
+$gender = $_POST['gender'];
+$games = $_POST['game'];
+$sql = "SELECT * FROM indoor WHERE Enrollment='$enroll'";
+$result = mysqli_query($conn, $sql);
+if(mysqli_num_rows($result) > 0)
+{
+	while($row = mysqli_fetch_assoc($result))
+	{
+		$id = $row["ID"];
+		$email = $row["Email"];
+		session_start();
+		$_SESSION['id'] = $id;
+		$_SESSION['email'] = $email;
+	}
+	header("Location: indoor_error.html");
+}
+else
+{
+	$sql = "INSERT INTO indoor (Name,Email,Phone,Enrollment,College,Gender,Games) VALUES ('$fname','$email','$phone','$enroll','$college','$gender','$games')";
+	$result = mysqli_query($conn, $sql);
+	if($sql == true)
+	{
+		header("Location: indoor_thanks.html ");
+	}
+}
+
+
+?>
